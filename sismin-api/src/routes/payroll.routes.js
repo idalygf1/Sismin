@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import authJwt from '../middlewares/authJwt.js';
+import { authJwt } from '../middlewares/authJwt.js';
 import {
   createPayroll,
   listPayroll,

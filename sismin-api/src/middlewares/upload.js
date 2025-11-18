@@ -19,9 +19,12 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+const maxSizeMb = Number(process.env.MAX_FILE_MB || 5);
+
 const upload = multer({
   storage,
   limits: { fileSize: process.env.MAX_FILE_MB * 1024 * 1024 },
+  limits: { fileSize: maxSizeMb * 1024 * 1024 },
   fileFilter
 });
 

@@ -6,6 +6,8 @@ const UserSchema = new Schema({
   passwordHash: { type: String, required: true },
   roleGlobal:   { type: String, enum: ['propietario', 'socio', 'admin'], required: true },
   concessions:  [{ type: Types.ObjectId, ref: 'Concession' }],
+  phone:        { type: String },
+  avatarUrl:    { type: String },
   status:       { type: Boolean, default: true } // 👈 ACTIVO/INACTIVO
 }, { timestamps: true });
 

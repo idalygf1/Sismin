@@ -1,23 +1,29 @@
+// sismin-api/src/routes/expenses.routes.js
 import { Router } from 'express';
-import multer from 'multer';
 import {
   createExpense,
   listExpenses,
   getExpense,
   updateExpense,
-  deleteExpense
+  deleteExpense,
 } from '../controllers/expenses.controller.js';
-import authJwt from '../middlewares/authJwt.js';
 
 const router = Router();
-const upload = multer({ dest: 'uploads/' });
 
-router.use(authJwt);
+// Crear gasto con comprobante
+router.post('/', createExpense);
 
-router.post('/', upload.single('file'), createExpense); // con comprobante
+// Listar gastos con filtros
 router.get('/', listExpenses);
+
+// Obtener gasto por ID
 router.get('/:id', getExpense);
-router.patch('/:id', updateExpense);
+
+// Editar gasto
+router.put('/:id', updateExpense);
+
+// Eliminar gasto (soft delete)
 router.delete('/:id', deleteExpense);
 
+// 👇 Esto es lo que faltaba
 export default router;
