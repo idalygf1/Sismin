@@ -1,7 +1,7 @@
 // sismin-api/src/controllers/dashboard.controller.js
 
 import Employee from '../models/Employee.js';
-import EmployeeDoc from '../models/EmployeeDoc.js';
+import EmployeeDoc from '../models/SimpleDoc.js';
 import Expense from '../models/Expense.js';
 import Payroll from '../models/Payroll.js';
 import Notification from '../models/Notification.js';

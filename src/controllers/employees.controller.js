@@ -1,13 +1,9 @@
 // src/controllers/employees.controller.js
 import Employee from '../models/Employee.js';
 
-/**
- * NOTA:
- * Por ahora NO se valida el acceso por concesión
- * para que puedas conectar el backend con el front sin errores 403.
- * Cuando ya tengas todo, podemos reactivar la validación.
- */
-
+// ------------------------------------------------------
+// Crear empleado
+// ------------------------------------------------------
 export async function createEmployee(req, res) {
   try {
     const { concession, name, curp, rfc, nss, puesto, salario, telefono } = req.body;
@@ -24,7 +20,7 @@ export async function createEmployee(req, res) {
       nss,
       puesto,
       salario,
-      telefono
+      telefono,
     });
 
     res.status(201).json(emp);
@@ -34,6 +30,10 @@ export async function createEmployee(req, res) {
   }
 }
 
+// ------------------------------------------------------
+// LISTA PRINCIPAL (para pantalla de Empleados)
+// GET /employees?concession=...&search=...
+// ------------------------------------------------------
 export async function listEmployees(req, res) {
   try {
     const { concession, search } = req.query;
@@ -46,11 +46,7 @@ export async function listEmployees(req, res) {
 
     if (search) {
       const regex = new RegExp(search, 'i');
-      q.$or = [
-        { name: regex },
-        { telefono: regex },
-        { puesto: regex },
-      ];
+      q.$or = [{ name: regex }, { telefono: regex }, { puesto: regex }];
     }
 
     const list = await Employee.find(q).sort({ name: 1 });
@@ -61,6 +57,25 @@ export async function listEmployees(req, res) {
   }
 }
 
+// ------------------------------------------------------
+// LISTA SIMPLE PARA DOCUMENTOS
+// GET /employees/list
+// No exige concession, solo regresa todos ordenados por nombre
+// ------------------------------------------------------
+export async function listEmployeesForDocs(req, res) {
+  try {
+    const employees = await Employee.find().sort({ name: 1 });
+    // 👇 El frontend acepta array directo o {employees}
+    res.json(employees);
+  } catch (e) {
+    console.error('Error en listEmployeesForDocs:', e);
+    res.status(500).json({ error: e.message });
+  }
+}
+
+// ------------------------------------------------------
+// Obtener un empleado por id
+// ------------------------------------------------------
 export async function getEmployee(req, res) {
   try {
     const emp = await Employee.findById(req.params.id);
@@ -74,6 +89,9 @@ export async function getEmployee(req, res) {
   }
 }
 
+// ------------------------------------------------------
+// Actualizar empleado
+// ------------------------------------------------------
 export async function updateEmployee(req, res) {
   try {
     const emp = await Employee.findById(req.params.id);
@@ -92,7 +110,7 @@ export async function updateEmployee(req, res) {
       'estatus',
     ];
 
-    fields.forEach(f => {
+    fields.forEach((f) => {
       if (req.body[f] !== undefined) {
         emp[f] = req.body[f];
       }
@@ -106,6 +124,9 @@ export async function updateEmployee(req, res) {
   }
 }
 
+// ------------------------------------------------------
+// Eliminar empleado
+// ------------------------------------------------------
 export async function removeEmployee(req, res) {
   try {
     const emp = await Employee.findById(req.params.id);
