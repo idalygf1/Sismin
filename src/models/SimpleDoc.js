@@ -29,6 +29,11 @@ const SimpleDocSchema = new Schema(
       type: Date,
       default: null,
     },
+    concession: { 
+      type: 
+      Types.ObjectId, 
+      ref: 'Concession', 
+      required: true },
   },
   {
     timestamps: true,
